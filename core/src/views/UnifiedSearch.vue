@@ -37,7 +37,7 @@
 				v-model="query"
 				class="unified-search__input"
 				type="search"
-				:placeholder="t('core', 'Search {types} …', { types: typesNames.join(', ').toLowerCase() })"
+				:placeholder="t('core', 'Search {types} …', { types: typesNames.filter(unique).join(', ') })"
 				@input="onInputDebounced"
 				@keypress.enter.prevent.stop="onInputEnter">
 			<!-- Search filters -->
@@ -65,7 +65,7 @@
 				<template v-if="isShortQuery" #desc>
 					{{ n('core',
 						'Please enter {minSearchLength} character or more to search',
-						'Please enter {minSearchLength} characters  or more to search',
+						'Please enter {minSearchLength} characters or more to search',
 						minSearchLength,
 						{minSearchLength}) }}
 				</template>
@@ -74,11 +74,11 @@
 
 		<!-- Grouped search results -->
 		<template v-else>
-			<ul v-for="({list, type}, typesIndex) in orderedResults"
+			<ul v-for="({list, name, type}, typesIndex) in orderedResults"
 				:key="type"
 				class="unified-search__results"
 				:class="`unified-search__results-${type}`"
-				:aria-label="typesMap[type]">
+				:aria-label="name">
 				<!-- Search results -->
 				<li v-for="(result, index) in limitIfAny(list, type)" :key="result.resourceUrl">
 					<SearchResult v-bind="result"
@@ -179,7 +179,8 @@ export default {
 				.filter(type => type in this.results)
 				.map(type => ({
 					type,
-					list: this.results[type],
+					name: this.results[type].name,
+					list: this.results[type].entries,
 				}))
 		},
 
@@ -300,6 +301,10 @@ export default {
 			this.focused = null
 		},
 
+		unique(value, index, self) {
+			return self.indexOf(value) === index
+		},
+
 		/**
 		 * Focus the search input on next tick
 		 */
@@ -359,7 +364,7 @@ export default {
 
 				// Process results
 				if (request.data.entries.length > 0) {
-					this.$set(this.results, type, request.data.entries)
+					this.$set(this.results, type, request.data)
 				} else {
 					this.$delete(this.results, type)
 				}
@@ -410,7 +415,7 @@ export default {
 				}
 
 				if (request.data.entries.length > 0) {
-					this.results[type].push(...request.data.entries)
+					this.results[type].entries.push(...request.data.entries)
 				}
 
 				// Check if we reached end of pagination
@@ -425,7 +430,7 @@ export default {
 				this.limits[type] += this.defaultLimit
 
 				// Check if we reached end of pagination
-				if (this.limits[type] >= this.results[type].length) {
+				if (this.limits[type] >= this.results[type].entries.length) {
 					this.$set(this.reached, type, true)
 				}
 			}
