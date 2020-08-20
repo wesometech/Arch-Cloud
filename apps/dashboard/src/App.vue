@@ -2,7 +2,7 @@
 	<div id="app-dashboard" :style="backgroundStyle">
 		<h2>{{ greeting.text }}</h2>
 		<ul class="statuses">
-			<div v-for="status in registeredStatus"
+			<div v-for="status in sortedRegisteredStatus"
 				:id="'status-' + status"
 				:key="status">
 				<div :ref="'status-' + status" />
@@ -172,6 +172,9 @@ export default {
 				}
 				return indexA - indexB || a.id - b.id
 			})
+		},
+		sortedRegisteredStatus() {
+			return this.registeredStatus.slice().sort((a, b) => a > b)
 		},
 	},
 	watch: {
