@@ -59,6 +59,15 @@
 
 				<h3>{{ t('dashboard', 'Change background image') }}</h3>
 				<BackgroundSettings :background="background" @update:background="updateBackground" />
+				<h3>{{ t('dashboard', 'External services') }}</h3>
+				<p>
+					{{ t('dashboard', 'For your privacy, the weather data is requested by your Nextcloud server on your behalf so the weather service receives no personal information.') }}
+				</p>
+				<ul>
+					<li><a href="https://api.met.no/doc/TermsOfService" target="_blank">{{ t('dashboard', 'Weather data from Met.no') }}</a></li>
+					<li><a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank">{{ t('dashboard', 'Geocoding with Nominatim') }}</a></li>
+					<li><a href="https://www.opentopodata.org/#public-api" target="_blank">{{ t('dashboard', 'Elevation data from OpenTopoData') }}</a></li>
+				</ul>
 			</div>
 		</Modal>
 	</div>
