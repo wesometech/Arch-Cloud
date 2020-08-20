@@ -59,15 +59,14 @@
 
 				<h3>{{ t('dashboard', 'Change background image') }}</h3>
 				<BackgroundSettings :background="background" @update:background="updateBackground" />
+
 				<h3>{{ t('dashboard', 'Weather service') }}</h3>
 				<p>
 					{{ t('dashboard', 'For your privacy, the weather data is requested by your Nextcloud server on your behalf so the weather service receives no personal information.') }}
 				</p>
-				<ul>
-					<li><a href="https://api.met.no/doc/TermsOfService" target="_blank">{{ t('dashboard', 'Weather data from Met.no') }}</a></li>
-					<li><a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank">{{ t('dashboard', 'Geocoding with Nominatim') }}</a></li>
-					<li><a href="https://www.opentopodata.org/#public-api" target="_blank">{{ t('dashboard', 'Elevation data from OpenTopoData') }}</a></li>
-				</ul>
+				<p class="credits--end">
+					<a href="https://api.met.no/doc/TermsOfService" target="_blank" rel="noopener">{{ t('dashboard', 'Weather data from Met.no') }}</a>, <a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener">{{ t('dashboard', 'geocoding with Nominatim') }}</a>, <a href="https://www.opentopodata.org/#public-api" target="_blank" rel="noopener">{{ t('dashboard', 'elevation data from OpenTopoData') }}</a>.
+				</p>
 			</div>
 		</Modal>
 	</div>
@@ -494,6 +493,25 @@ export default {
 
 			&:not(:first-of-type) {
 				margin-top: 64px;
+			}
+		}
+
+		p {
+			max-width: 650px;
+			margin: 0 auto;
+
+			a:hover,
+			a:focus {
+				border-bottom: 2px solid var(--color-border);
+			}
+		}
+
+		.credits--end {
+			padding-bottom: 32px;
+			color: var(--color-text-maxcontrast);
+
+			a {
+				color: var(--color-text-maxcontrast);
 			}
 		}
 	}
